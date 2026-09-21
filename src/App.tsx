@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import {
-  ArrowRight, Building2, ChevronDown, Clock3, ConciergeBell, Instagram,
+  ArrowRight, Building2, ChevronDown, ChevronUp, Clock3, ConciergeBell, Instagram,
   KeyRound, Landmark, Mail, MapPin, Martini, Menu, MessageCircle, Music,
-  PartyPopper, Route, Send, ShieldCheck, Sparkles, Store, X,
+  PartyPopper, Route, ShieldCheck, Sparkles, Store, X,
   type LucideIcon,
 } from 'lucide-react'
+import { WhatsAppIcon } from './components/WhatsAppIcon'
 import {
   buildCareerMessage, buildQuoteMessage, eloSitesWaLink, serviceMessages, waLink, waMessages,
   type CareerData, type ServiceKey,
@@ -69,6 +70,7 @@ const navItems = [
   ['atuacao', 'Atuação'],
   ['clientes', 'Clientes'],
   ['trabalhe', 'Trabalhe conosco'],
+  ['faq', 'Perguntas frequentes'],
   ['contato', 'Contato'],
 ] as const
 
@@ -79,9 +81,9 @@ function App() {
   const [activeSection, setActiveSection] = useState<string>('')
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [careerSent, setCareerSent] = useState(false)
-  const [careerData, setCareerData] = useState<CareerData>({})
   const [quoteSent, setQuoteSent] = useState(false)
   const [bubbleOpen, setBubbleOpen] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const bubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -119,6 +121,9 @@ function App() {
       const reachedBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4
       if (reachedBottom && navSectionIds.length > 0) current = navSectionIds[navSectionIds.length - 1]
       setActiveSection(prev => (prev === current ? prev : current))
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+      const progress = maxScroll > 0 ? Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100)) : 0
+      setScrollProgress(progress)
     }
     const handleScroll = () => {
       if (!ticking) {
@@ -136,7 +141,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const elements = Array.from(document.querySelectorAll<HTMLElement>('.reveal'))
+    const elements = Array.from(document.querySelectorAll<HTMLElement>('.reveal, .section-fade'))
     if (!('IntersectionObserver' in window)) {
       elements.forEach(el => el.classList.add('in'))
       return
@@ -148,13 +153,18 @@ function App() {
           observer.unobserve(entry.target)
         }
       })
-    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' })
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' })
     elements.forEach(el => observer.observe(el))
     return () => observer.disconnect()
   }, [])
 
   const closeMenu = () => setMenuOpen(false)
   const revealDelay = (i: number, step = 80) => ({ transitionDelay: `${(i % 3) * step}ms` })
+
+  const scrollToTop = () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  }
 
   const clearBubbleTimer = useCallback(() => {
     if (bubbleTimer.current !== null) {
@@ -193,14 +203,15 @@ function App() {
   const handleCareer = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = new FormData(e.currentTarget)
-    setCareerData({
+    const career: CareerData = {
       name: formValue(data, 'name'),
       phone: formValue(data, 'phone'),
       email: formValue(data, 'email'),
       city: formValue(data, 'city'),
       area: formValue(data, 'area'),
       message: formValue(data, 'message'),
-    })
+    }
+    window.open(waLink(buildCareerMessage(career)), '_blank', 'noopener,noreferrer')
     setCareerSent(true)
   }
 
@@ -221,6 +232,15 @@ function App() {
 
   return (
     <div className="site">
+      <div
+        className={scrollProgress > 0.5 ? 'scroll-progress active' : 'scroll-progress'}
+        role="progressbar"
+        aria-label="Progresso de navegação na página"
+        aria-valuenow={Math.round(scrollProgress)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        style={{ width: `${scrollProgress}%` }}
+      />
       <header className={menuOpen ? 'header menu-open' : 'header'}>
         <a className="brand" href="#inicio" onClick={closeMenu} aria-label="Toledo Segurança — início">
           <img src="/assets/brand/toledo-logo.png" alt="Toledo Segurança" width="1377" height="950" fetchPriority="high" decoding="async" />
@@ -252,19 +272,19 @@ function App() {
             )
           })}
           <a className="nav-cta" href={waLink(waMessages.menu)} target="_blank" rel="noreferrer" onClick={closeMenu}>
-            Falar no WhatsApp <ArrowRight size={16} />
+            Falar no WhatsApp <WhatsAppIcon size={16} aria-hidden="true" /> <ArrowRight size={16} />
           </a>
         </nav>
 
         <a className="header-cta" href={waLink(waMessages.header)} target="_blank" rel="noreferrer">
-          Solicitar orçamento <ArrowRight size={16} />
+          Solicitar orçamento <WhatsAppIcon size={16} aria-hidden="true" /> <ArrowRight size={16} />
         </a>
       </header>
 
       {menuOpen && <button className="menu-backdrop" type="button" aria-label="Fechar menu" onClick={closeMenu} />}
 
       <main>
-        <section id="inicio" className="hero section-dark" aria-label="Apresentação">
+        <section id="inicio" className="hero section-dark section-fade in" aria-label="Apresentação">
           <div className="hero-grid" aria-hidden="true" />
           <div className="hero-skull" aria-hidden="true"><img src="/assets/brand/toledo-skull.png" alt="" /></div>
           <div className="hero-content reveal">
@@ -272,7 +292,7 @@ function App() {
             <h1>Segurança que<br /><em>protege</em> o que importa.</h1>
             <p className="hero-lead">Segurança profissional para eventos e controle de acesso, com profissionais treinados, disciplina e presença constante em Jundiaí e região.</p>
             <div className="hero-actions">
-              <a className="btn btn-gold" href={waLink(waMessages.hero)} target="_blank" rel="noreferrer">Solicitar orçamento <ArrowRight size={18} /></a>
+              <a className="btn btn-gold" href={waLink(waMessages.hero)} target="_blank" rel="noreferrer">Solicitar orçamento <WhatsAppIcon size={18} aria-hidden="true" /> <ArrowRight size={18} /></a>
               <a className="text-link" href="#servicos">Conheça os serviços <ArrowRight size={17} /></a>
             </div>
           </div>
@@ -283,7 +303,7 @@ function App() {
           </div>
         </section>
 
-        <section id="sobre" className="about section-light" aria-labelledby="sobre-title">
+        <section id="sobre" className="about section-light section-fade" aria-labelledby="sobre-title">
           <div className="section-wrap split">
             <div className="section-heading reveal">
               <p className="eyebrow dark"><span /> Quem somos</p>
@@ -307,7 +327,7 @@ function App() {
           </div>
         </section>
 
-        <section id="servicos" className="services section-dark" aria-labelledby="servicos-title">
+        <section id="servicos" className="services section-dark section-fade" aria-labelledby="servicos-title">
           <div className="section-wrap">
             <div className="section-heading centered reveal">
               <p className="eyebrow"><span /> Serviços</p>
@@ -327,7 +347,7 @@ function App() {
                     rel="noreferrer"
                     aria-label={`Solicitar orçamento de ${title} pelo WhatsApp`}
                   >
-                    Solicitar orçamento <ArrowRight size={15} aria-hidden="true" />
+                    Solicitar orçamento <WhatsAppIcon size={15} aria-hidden="true" /> <ArrowRight size={15} aria-hidden="true" />
                   </a>
                 </article>
               ))}
@@ -335,7 +355,7 @@ function App() {
           </div>
         </section>
 
-        <section id="atuacao" className="coverage section-light" aria-labelledby="atuacao-title">
+        <section id="atuacao" className="coverage section-light section-fade" aria-labelledby="atuacao-title">
           <div className="section-wrap coverage-inner">
             <div className="coverage-mark" aria-hidden="true"><img src="/assets/brand/toledo-skull.png" alt="" /></div>
             <div className="reveal">
@@ -351,7 +371,7 @@ function App() {
           </div>
         </section>
 
-        <section className="differentials section-dark" aria-labelledby="diferenciais-title">
+        <section className="differentials section-dark section-fade" aria-labelledby="diferenciais-title">
           <div className="section-wrap">
             <div className="section-heading reveal">
               <p className="eyebrow"><span /> Diferenciais</p>
@@ -367,7 +387,7 @@ function App() {
           </div>
         </section>
 
-        <section id="clientes" className="clients section-light" aria-labelledby="clientes-title">
+        <section id="clientes" className="clients section-light section-fade" aria-labelledby="clientes-title">
           <div className="section-wrap">
             <div className="section-heading centered reveal">
               <p className="eyebrow dark"><span /> Empresas atendidas</p>
@@ -382,7 +402,7 @@ function App() {
           </div>
         </section>
 
-        <section className="process section-dark" aria-labelledby="processo-title">
+        <section className="process section-dark section-fade" aria-labelledby="processo-title">
           <div className="section-wrap">
             <div className="section-heading centered reveal">
               <p className="eyebrow"><span /> Como funciona</p>
@@ -398,7 +418,7 @@ function App() {
           </div>
         </section>
 
-        <section id="trabalhe" className="career section-light" aria-labelledby="trabalhe-title">
+        <section id="trabalhe" className="career section-light section-fade" aria-labelledby="trabalhe-title">
           <div className="section-wrap career-inner">
             <div className="section-heading reveal">
               <p className="eyebrow dark"><span /> Trabalhe conosco</p>
@@ -434,14 +454,14 @@ function App() {
               <button className="btn btn-dark" type="submit">{careerSent ? 'Dados validados' : 'Enviar candidatura'} <ArrowRight size={18} /></button>
               {careerSent && (
                 <p className="form-status" role="status">
-                  Protótipo: os dados foram validados no navegador e nenhum arquivo é armazenado ou enviado automaticamente. Para concluir, envie seu currículo para <a href="mailto:jt.toledoseguranca@gmail.com">jt.toledoseguranca@gmail.com</a> ou fale com a equipe pelo <a href={waLink(buildCareerMessage(careerData))} target="_blank" rel="noreferrer">WhatsApp</a>.
+                  Abrimos o WhatsApp com seus dados. Anexe seu currículo diretamente na conversa para concluir.
                 </p>
               )}
             </form>
           </div>
         </section>
 
-        <section id="faq" className="faq section-light" aria-labelledby="faq-title">
+        <section id="faq" className="faq section-light section-fade" aria-labelledby="faq-title">
           <div className="section-wrap faq-inner">
             <div className="section-heading reveal">
               <p className="eyebrow dark"><span /> Dúvidas</p>
@@ -464,7 +484,7 @@ function App() {
           </div>
         </section>
 
-        <section id="orcamento" className="quote section-dark" aria-labelledby="orcamento-title">
+        <section id="orcamento" className="quote section-dark section-fade" aria-labelledby="orcamento-title">
           <div className="section-wrap quote-inner">
             <div className="section-heading reveal">
               <p className="eyebrow"><span /> Solicite orçamento</p>
@@ -493,7 +513,7 @@ function App() {
                 </select>
               </label>
               <label>Mensagem<textarea name="message" rows={3} placeholder="Descreva o evento, o local ou a necessidade." /></label>
-              <button className="btn btn-gold" type="submit"><Send size={18} /> Enviar pelo WhatsApp</button>
+              <button className="btn btn-gold" type="submit"><WhatsAppIcon size={18} aria-hidden="true" /> Enviar pelo WhatsApp</button>
               <p className="quote-note" role="status">
                 {quoteSent
                   ? 'Abrimos o WhatsApp com os dados preenchidos. Se a janela não abrir, use o botão de WhatsApp no canto da tela.'
@@ -503,17 +523,17 @@ function App() {
           </div>
         </section>
 
-        <section id="contato" className="contact section-dark" aria-labelledby="contato-title">
+        <section id="contato" className="contact section-dark section-fade" aria-labelledby="contato-title">
           <div className="contact-glow" aria-hidden="true" />
           <div className="section-wrap contact-inner reveal">
             <div>
               <p className="eyebrow"><span /> Contato</p>
               <h2 id="contato-title">Vamos conversar sobre<br /><em>sua necessidade.</em></h2>
               <p>Solicite um orçamento e conte o que você precisa proteger.</p>
-              <a className="btn btn-gold" href={waLink(waMessages.contact)} target="_blank" rel="noreferrer"><MessageCircle size={18} /> Falar no WhatsApp</a>
+              <a className="btn btn-gold" href={waLink(waMessages.contact)} target="_blank" rel="noreferrer"><WhatsAppIcon size={18} aria-hidden="true" /> Falar no WhatsApp</a>
             </div>
             <address className="contact-details">
-              <a className="contact-line" href={waLink(waMessages.contactLine)} target="_blank" rel="noreferrer"><MessageCircle size={17} aria-hidden="true" /> WhatsApp: (11) 91371-4556</a>
+              <a className="contact-line" href={waLink(waMessages.contactLine)} target="_blank" rel="noreferrer"><WhatsAppIcon size={17} aria-hidden="true" /> WhatsApp: (11) 91371-4556</a>
               <a className="contact-line" href="mailto:jt.toledoseguranca@gmail.com"><Mail size={17} aria-hidden="true" /> jt.toledoseguranca@gmail.com</a>
               <a className="contact-line" href="https://www.instagram.com/toledoseguranca4/" target="_blank" rel="noreferrer"><Instagram size={17} aria-hidden="true" /> @toledoseguranca4</a>
               <span className="contact-line"><MapPin size={17} aria-hidden="true" /> Rua José do Patrocínio, 134, Centro — Jundiaí/SP</span>
@@ -558,9 +578,21 @@ function App() {
             rel="noreferrer"
             aria-label="Falar com a Elo Sites pelo WhatsApp"
           >
+            <WhatsAppIcon size={16} aria-hidden="true" />
             <img src="/assets/brand/elo-sites-logo.png" alt="Elo Sites" width="1536" height="382" decoding="async" />
           </a>
-          <span>O melhor site pelo melhor preço</span>
+          <span>o melhor site pelo melhor preço</span>
+        </div>
+        <div className="footer-action">
+          <button
+            type="button"
+            className="back-to-top"
+            onClick={scrollToTop}
+            aria-label="Voltar ao topo"
+          >
+            <ChevronUp size={13} aria-hidden="true" />
+            <span>Voltar ao topo</span>
+          </button>
         </div>
       </footer>
 
@@ -571,12 +603,12 @@ function App() {
               <X size={15} aria-hidden="true" />
             </button>
             <a className="wa-bubble-link" href={waLink(waMessages.bubble)} target="_blank" rel="noreferrer">
-              <span>Olá! 👋 Podemos ajudar com a segurança do seu evento ou empresa. Fale com a gente e solicite um orçamento.</span>
+              <span>Olá! 👋 Posso te ajudar a encontrar a solução ideal para sua segurança? Fale com a gente.</span>
             </a>
           </aside>
         )}
         <a className="floating-wa" href={waLink(waMessages.floating)} target="_blank" rel="noreferrer" aria-label="Falar com a Toledo pelo WhatsApp" title="Falar no WhatsApp">
-          <MessageCircle aria-hidden="true" />
+          <WhatsAppIcon size={24} aria-hidden="true" />
         </a>
       </div>
     </div>

@@ -118,9 +118,6 @@ h2 { font-size:clamp(3.2rem,6vw,6rem); line-height:.88; margin-bottom:24px; }
 .career-form input:not([type=checkbox]):not([type=file]), .career-form textarea, .career-form select { width:100%; border:1px solid #d0cdc3; background:#f8f7f3; padding:13px; outline:none; color:#111; resize:vertical; }
 .career-form select { appearance:none; background-image:linear-gradient(45deg,transparent 50%,#7a6232 50%),linear-gradient(135deg,#7a6232 50%,transparent 50%); background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
 .career-form input:focus, .career-form textarea:focus, .career-form select:focus { border-color:#a48445; box-shadow:0 0 0 2px rgba(199,161,90,.12); }
-.file-input { border:1px dashed #bcb8ad; padding:15px; background:#f8f7f3; cursor:pointer; }
-.file-input span { color:#888; text-transform:none; letter-spacing:0; font-weight:500; }
-.file-input input { margin-top:4px; max-width:100%; min-width:0; }
 .consent { display:flex !important; grid-template-columns:none !important; flex-direction:row; align-items:flex-start; text-transform:none !important; letter-spacing:0 !important; font-weight:500 !important; color:#555; }
 .consent input { margin-top:2px; accent-color:#111; }
 .form-status { margin:0; color:#5d4923; font-size:.75rem; line-height:1.55; }

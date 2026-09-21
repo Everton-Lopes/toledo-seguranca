@@ -443,10 +443,6 @@ function App() {
                 </select>
               </label>
               <label>Breve apresentação<textarea name="message" rows={3} placeholder="Conte brevemente sobre você e sua experiência." /></label>
-              <label className="file-input">
-                Currículo <span>PDF, DOC ou DOCX</span>
-                <input type="file" name="resume" accept=".pdf,.doc,.docx" />
-              </label>
               <label className="consent">
                 <input type="checkbox" required />
                 <span>Autorizo o uso dos dados pessoais e do currículo enviados exclusivamente para fins de recrutamento e seleção, podendo solicitar a exclusão a qualquer momento.</span>

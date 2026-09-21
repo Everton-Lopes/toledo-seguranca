@@ -451,10 +451,13 @@ function App() {
                 <input type="checkbox" required />
                 <span>Autorizo o uso dos dados pessoais e do currículo enviados exclusivamente para fins de recrutamento e seleção, podendo solicitar a exclusão a qualquer momento.</span>
               </label>
-              <button className="btn btn-dark" type="submit">{careerSent ? 'Dados validados' : 'Enviar candidatura'} <ArrowRight size={18} /></button>
+              <p className="form-status">
+                Ao enviar, abriremos o WhatsApp com seus dados preenchidos. Anexe seu currículo diretamente na conversa para concluir a candidatura.
+              </p>
+              <button className="btn btn-dark" type="submit"><WhatsAppIcon size={18} aria-hidden="true" /> {careerSent ? 'Dados validados' : 'Enviar candidatura'} <ArrowRight size={18} /></button>
               {careerSent && (
                 <p className="form-status" role="status">
-                  Abrimos o WhatsApp com seus dados. Anexe seu currículo diretamente na conversa para concluir.
+                  Dados validados. Se o WhatsApp não abrir automaticamente, use o botão de WhatsApp no canto da tela e anexe seu currículo na conversa.
                 </p>
               )}
             </form>
@@ -578,7 +581,6 @@ function App() {
             rel="noreferrer"
             aria-label="Falar com a Elo Sites pelo WhatsApp"
           >
-            <WhatsAppIcon size={16} aria-hidden="true" />
             <img src="/assets/brand/elo-sites-logo.png" alt="Elo Sites" width="1536" height="382" decoding="async" />
           </a>
           <span>o melhor site pelo melhor preço</span>

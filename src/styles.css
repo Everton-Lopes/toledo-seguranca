@@ -168,7 +168,7 @@ a.contact-line:hover { color:var(--gold-light); }
 .instagram:hover { color:var(--gold); border-color:var(--gold); transform:translateY(-2px); }
 .footer-bottom { max-width:var(--max); margin:36px auto 0; padding-top:20px; border-top:1px solid #202020; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px 20px; color:#b0b0b0; font-size:.64rem; line-height:1.6; position:relative; }
 .footer-credit { max-width:var(--max); margin:24px auto 0; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:clamp(4px,1.2vw,8px); color:#fff; font-size:clamp(.5rem,2.45vw,.66rem); font-weight:400; line-height:1.5; position:relative; }
-.footer-credit > span { white-space:nowrap; font-weight:400; }
+.footer-credit > span { white-space:nowrap; font-weight:400; text-transform:uppercase; }
 .footer-credit-link { display:inline-flex; align-items:center; transition:opacity .2s; }
 .footer-credit-link:hover { opacity:.85; }
 .footer-credit img { width:clamp(54px,13vw,84px); height:auto; object-fit:contain; flex-shrink:0; }

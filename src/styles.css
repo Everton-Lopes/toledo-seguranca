@@ -100,9 +100,9 @@ h2 { font-size:clamp(3.2rem,6vw,6rem); line-height:.88; margin-bottom:24px; }
 .diff-item h3 { font-family:'Barlow Condensed'; text-transform:uppercase; font-size:1.7rem; margin:0; }
 .diff-item p { grid-column:2; color:#999; margin:0; line-height:1.6; font-size:.88rem; }
 .client-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.client-logo { min-height:120px; border:1px solid #d8d5cc; background:#fbfaf8; display:flex; align-items:center; justify-content:center; padding:22px; text-align:center; transition:transform .3s cubic-bezier(.22,.61,.36,1), border-color .3s ease, box-shadow .3s ease, background-color .3s ease; will-change:transform; position:relative; }
-.client-logo:hover { border-color:var(--gold); box-shadow:0 8px 24px rgba(0,0,0,.08), inset 0 0 0 1px var(--gold); transform:scale(1.03) translateY(-3px); background:#fff; z-index:2; }
+.client-logo { display:flex; align-items:center; justify-content:center; }
 .client-logo span { font-family:'Barlow Condensed'; font-size:1.4rem; text-transform:uppercase; letter-spacing:.03em; }
+.client-logo img { height:76px; width:auto; max-width:100%; object-fit:contain; }
 .process { background:#0d0d0d; }
 .process-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; }
 .process-item { padding:20px 24px; border-left:1px solid rgba(255,255,255,.12); }

@@ -18,8 +18,12 @@ const formValue = (data: FormData, key: string) => {
 }
 
 const clients = [
-  'Jund-Trafo', 'Clube Uirapuru', 'JC Kids', 'Azul Linhas Aéreas Brasileiras',
-  'Jundiaí Shopping', 'Shopping Iguatemi Campinas',
+  { name: 'Jund-Trafo', logo: 'jund-trafo-logo.png' },
+  { name: 'Clube Uirapuru', logo: 'clube-uirapuru-logo.png' },
+  { name: 'JC Kids', logo: 'jckids-logo.png' },
+  { name: 'Azul Linhas Aéreas Brasileiras', logo: 'azul-linhas-aereas-logo.png' },
+  { name: 'Jundiaí Shopping', logo: 'jundiaishopping-logo.png' },
+  { name: 'Shopping Iguatemi Campinas', logo: 'shopping-iguatemi-campinas-logo.png' },
 ]
 
 type Service = { icon: LucideIcon; title: ServiceKey; text: string }
@@ -392,11 +396,13 @@ function App() {
             <div className="section-heading centered reveal">
               <p className="eyebrow dark"><span /> Empresas atendidas</p>
               <h2 id="clientes-title">Marcas que já<br /><strong>contaram com a Toledo.</strong></h2>
-              <p>Empresas e organizações atendidas, apresentadas com autorização. Os logotipos oficiais serão adicionados conforme liberação dos clientes.</p>
+              <p>Empresas e organizações atendidas, apresentadas com autorização.</p>
             </div>
             <div className="client-grid">
-              {clients.map((name, i) => (
-                <div className="client-logo reveal" key={name} style={revealDelay(i)}><span>{name}</span></div>
+              {clients.map(({ name, logo }, i) => (
+                <div className="client-logo reveal" key={name} style={revealDelay(i)}>
+                  <img src={`/assets/clients/${logo}`} alt={name} loading="lazy" decoding="async" />
+                </div>
               ))}
             </div>
           </div>

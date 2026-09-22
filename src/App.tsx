@@ -26,6 +26,15 @@ const clients = [
   { name: 'Shopping Iguatemi Campinas', logo: 'shopping-iguatemi-campinas-logo.png' },
 ]
 
+const clientLogoSize: Record<string, { width: number; height: number }> = {
+  'jund-trafo-logo.png': { width: 465, height: 200 },
+  'clube-uirapuru-logo.png': { width: 348, height: 200 },
+  'jckids-logo.png': { width: 240, height: 200 },
+  'azul-linhas-aereas-logo.png': { width: 692, height: 200 },
+  'jundiaishopping-logo.png': { width: 837, height: 200 },
+  'shopping-iguatemi-campinas-logo.png': { width: 792, height: 200 },
+}
+
 type Service = { icon: LucideIcon; title: ServiceKey; text: string }
 
 const services: Service[] = [
@@ -399,11 +408,21 @@ function App() {
               <p>Empresas e organizações atendidas, apresentadas com autorização.</p>
             </div>
             <div className="client-grid">
-              {clients.map(({ name, logo }, i) => (
-                <div className="client-logo reveal" key={name} style={revealDelay(i)}>
-                  <img src={`/assets/clients/${logo}`} alt={name} loading="lazy" decoding="async" />
-                </div>
-              ))}
+              {clients.map(({ name, logo }, i) => {
+                const size = clientLogoSize[logo]
+                return (
+                  <div className="client-logo reveal" key={name} style={revealDelay(i)}>
+                    <img
+                      src={`/assets/clients/${logo}`}
+                      alt={name}
+                      width={size.width}
+                      height={size.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -607,7 +626,7 @@ function App() {
               <X size={15} aria-hidden="true" />
             </button>
             <a className="wa-bubble-link" href={waLink(waMessages.bubble)} target="_blank" rel="noreferrer">
-              <span>Olá! 👋 Posso te ajudar a encontrar a solução ideal para sua segurança? Fale com a gente.</span>
+              <span>Olá! Posso te ajudar a encontrar a solução ideal para sua segurança? Fale com a gente.</span>
             </a>
           </aside>
         )}

@@ -111,6 +111,7 @@ h2 { font-size:clamp(3.2rem,6vw,6rem); line-height:.88; margin-bottom:24px; }
 .diff-item p { grid-column:2; color:#999; margin:0; line-height:1.6; font-size:.88rem; }
 .client-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:48px 32px; }
 .client-logo { display:flex; align-items:center; justify-content:center; }
+.client-logo picture { display:flex; align-items:center; justify-content:center; }
 .client-logo span { font-family:'Barlow Condensed'; font-size:1.4rem; text-transform:uppercase; letter-spacing:.03em; }
 .client-logo img { height:76px; width:auto; max-width:100%; object-fit:contain; }
 .client-logo img[src*="jund-trafo-logo"],

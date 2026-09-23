@@ -417,14 +417,17 @@ function App() {
                 const size = clientLogoSize[logo]
                 return (
                   <div className="client-logo reveal" key={name} style={revealDelay(i)}>
-                    <img
-                      src={`/assets/clients/${logo}`}
-                      alt={name}
-                      width={size.width}
-                      height={size.height}
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <picture>
+                      <source srcSet={`/assets/clients/${logo.replace(/\.png$/, '.webp')}`} type="image/webp" />
+                      <img
+                        src={`/assets/clients/${logo}`}
+                        alt={name}
+                        width={size.width}
+                        height={size.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
                   </div>
                 )
               })}

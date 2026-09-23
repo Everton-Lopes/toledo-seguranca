@@ -128,7 +128,7 @@ h2 { font-size:clamp(3.2rem,6vw,6rem); line-height:.88; margin-bottom:24px; }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
 .career-form label { display:grid; gap:7px; font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.09em; }
 .career-form input:not([type=checkbox]):not([type=file]), .career-form textarea, .career-form select { width:100%; border:1px solid #d0cdc3; background:#f8f7f3; padding:13px; outline:none; color:#111; resize:vertical; transition:border-color .2s ease, box-shadow .2s ease; }
-.career-form select { appearance:none; background-image:linear-gradient(45deg,transparent 50%,#7a6232 50%),linear-gradient(135deg,#7a6232 50%,transparent 50%); background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+.career-form select { appearance:none; background-image:linear-gradient(45deg,transparent 50%,#7a6232 50%),linear-gradient(135deg,#7a6232 50%,transparent 50%); background-position:calc(100% - 18px) center,calc(100% - 13px) center; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
 .career-form input:focus, .career-form textarea:focus, .career-form select:focus { border-color:#a48445; box-shadow:0 0 0 2px rgba(199,161,90,.12); }
 .career-form.attempted input:not([type=checkbox]):not([type=file]):invalid,
 .career-form.attempted textarea:invalid,
@@ -149,7 +149,7 @@ h2 { font-size:clamp(3.2rem,6vw,6rem); line-height:.88; margin-bottom:24px; }
 .quote-form { background:#131313; border:1px solid rgba(255,255,255,.1); padding:34px; display:grid; gap:16px; }
 .quote-form label { display:grid; gap:7px; font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:#ddd; }
 .quote-form input, .quote-form select, .quote-form textarea { width:100%; border:1px solid rgba(255,255,255,.16); background:#0d0d0d; padding:13px; outline:none; color:var(--white); resize:vertical; transition:border-color .2s ease, box-shadow .2s ease; }
-.quote-form select { appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%); background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+.quote-form select { appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%); background-position:calc(100% - 18px) center,calc(100% - 13px) center; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
 .quote-form select option { color:#111; background:#f5f4f0; }
 .quote-form input:focus, .quote-form select:focus, .quote-form textarea:focus { border-color:var(--gold); box-shadow:0 0 0 2px rgba(199,161,90,.18); }
 .quote-form.attempted input:invalid,

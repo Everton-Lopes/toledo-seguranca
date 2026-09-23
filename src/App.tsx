@@ -95,6 +95,8 @@ function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
   const [careerSent, setCareerSent] = useState(false)
   const [quoteSent, setQuoteSent] = useState(false)
+  const [careerAttempted, setCareerAttempted] = useState(false)
+  const [quoteAttempted, setQuoteAttempted] = useState(false)
   const [bubbleOpen, setBubbleOpen] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const bubbleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -215,7 +217,12 @@ function App() {
 
   const handleCareer = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    if (!form.checkValidity()) {
+      setCareerAttempted(true)
+      return
+    }
+    const data = new FormData(form)
     const career: CareerData = {
       name: formValue(data, 'name'),
       phone: formValue(data, 'phone'),
@@ -230,7 +237,12 @@ function App() {
 
   const handleQuote = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = new FormData(e.currentTarget)
+    const form = e.currentTarget
+    if (!form.checkValidity()) {
+      setQuoteAttempted(true)
+      return
+    }
+    const data = new FormData(form)
     const message = buildQuoteMessage({
       name: formValue(data, 'name'),
       phone: formValue(data, 'phone'),
@@ -451,7 +463,7 @@ function App() {
               <p>Estamos em busca de profissionais comprometidos, responsáveis e preparados para atuar em eventos e demais operações.</p>
               <div className="career-note"><Sparkles size={19} aria-hidden="true" /> Cadastro para futuras oportunidades e escalas.</div>
             </div>
-            <form className="career-form reveal" onSubmit={handleCareer}>
+            <form className={`career-form reveal${careerAttempted ? ' attempted' : ''}`} onSubmit={handleCareer} noValidate>
               <div className="form-row">
                 <label>Nome completo<input required name="name" autoComplete="name" placeholder="Seu nome" /></label>
                 <label>WhatsApp<input required type="tel" inputMode="tel" name="phone" autoComplete="tel" placeholder="(11) 99999-9999" /></label>
@@ -520,7 +532,7 @@ function App() {
                 <li><MessageCircle size={18} aria-hidden="true" /> Contato direto pelo WhatsApp</li>
               </ul>
             </div>
-            <form className="quote-form reveal" onSubmit={handleQuote}>
+            <form className={`quote-form reveal${quoteAttempted ? ' attempted' : ''}`} onSubmit={handleQuote} noValidate>
               <div className="form-row">
                 <label>Nome<input required name="name" autoComplete="name" placeholder="Seu nome" /></label>
                 <label>WhatsApp<input required type="tel" inputMode="tel" name="phone" autoComplete="tel" placeholder="(11) 99999-9999" /></label>

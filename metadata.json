@@ -1,0 +1,6 @@
+{
+  "name": "Toledo Segurança",
+  "description": "Segurança para eventos, portaria, controle de acesso e rondas preventivas em Jundiaí e região.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
